@@ -2,9 +2,9 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.teknasyon</groupId>
-  <artifactId>kairos_sdk</artifactId>
-  <version>1.0.1-beta.2</version>
+  <groupId>kairos</groupId>
+  <artifactId>kairos-core</artifactId>
+  <version>1.0.1</version>
   <packaging>aar</packaging>
   <description>POM was created from install:install-file</description>
   <dependencies>
@@ -117,28 +117,40 @@
       <scope>compile</scope>
   	</dependency>
   	<dependency>
-      <groupId>com.teknasyon.ares</groupId>
-      <artifactId>kairoseventbus</artifactId>
-      <version>0.0.1</version>
+	  <groupId>kairos</groupId>
+	  <artifactId>event-bus</artifactId>
+	  <version>0.0.3</version>
       <scope>compile</scope>
   	</dependency>
   	<dependency>
-      <groupId>com.teknasyon</groupId>
-      <artifactId>billingmanager</artifactId>
-      <version>1.0.1-rc.6</version>
+	  <groupId>kairos</groupId>
+	  <artifactId>attribution-agent</artifactId>
+	  <version>1.0.2-beta.1</version>
       <scope>compile</scope>
   	</dependency>
   	<dependency>
-      <groupId>com.teknasyon</groupId>
-      <artifactId>referrals_sdk</artifactId>
-      <version>1.0.0-beta.12</version>
+	  <groupId>kairos</groupId>
+	  <artifactId>attribution-agent</artifactId>
+	  <version>1.0.2-beta.1</version>
       <scope>compile</scope>
   	</dependency>
   	<dependency>
-      <groupId>com.teknasyon</groupId>
-      <artifactId>ploutus</artifactId>
-      <version>1.0.0-beta.17</version>
+	  <groupId>kairos</groupId>
+	  <artifactId>ploutos</artifactId>
+	  <version>1.0.1-beta.2</version>
       <scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.facebook.react</groupId>
+  		<artifactId>react-native</artifactId>
+  		<version>0.61.5</version>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.webkit</groupId>
+  		<artifactId>android-jsc</artifactId>
+  		<version>r245459</version>
+  		<scope>compile</scope>
   	</dependency>
   </dependencies>
 </project>
