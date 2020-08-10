@@ -1,6 +1,14 @@
-# Usage
+# Kairos Android SDK
 
-## Adding dependencies
+Kairos is a microservice that makes it easy to manage landing page screens of your application.
+
+## Requirements
+
+- Min Sdk Level 21+
+- Kotlin 1.3
+
+
+## Installation
 
 Add maven repo to project level gradle file
 
