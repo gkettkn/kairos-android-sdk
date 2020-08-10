@@ -1,8 +1,8 @@
-# Kairos Kullanımı
+# Usage
 
-## Kütüphanenin projeye dahil edilmesi
+## Adding dependencies
 
-Projenin build.gradle dosyasında aşağıdaki maven reposu eklenmeli
+Add maven repo to project level gradle file
 
 ```gradle
 allprojects {
@@ -13,15 +13,14 @@ allprojects {
   }
 }
 ```
-
-Uygulamanın build.gradle dosyasında aşağıdaki bağımlılık eklenmeli
+Add dependency to module level gradle file
 
 ```gradle
 implementation 'kairos:kairos-core:1.0.1’
 ```
 
-## Kütüphanenin kullanımı
-Uygulamanızın açılış activity sınıfının onCreate methodu içerisinde Kairos kütüphanesi başlatılır.
+## Usage
+Add following code on onCreate method of your starting activity
 
 ```kotlin
 Kairos.initKairosWith(
@@ -39,19 +38,19 @@ Kairos.initKairosWith(
 
 
 
-| Parametreler | |
+| Parameters | |
 | ----- | ----- |
-| application | Uygulammanın application instance’ı |
-| activity | Kairosun başlatıldığı activity’nin instance’ı |
-| apiKey | Kairos’a ait api key |
-| environment | Kairos’un çalıştığı environment. Test ortamında SANDBOX, canlı ortamda PRODUCTION kullanılmalıdır |
-| countryCode | Kullanıcının ülkesine ait 2 karakterli ISO kodu,  KairosCountry sınıfı altında değerlere ulaşılabilir |
-| languageCode | Kullanıcının dil bilgisine  ait 2 karaterli ISO kodu, KairosLanguage sınıfı altında değerlere ulaşılaiblir. |
-| onKairosReadyFunc | Sayfa gönderilmeye hazır olduğunda çağrılacak lambda fonksiyonu |
-| onKairosErrorFunc | Hata ile karşılaşıldığında çağrılacak lambda fonksiyonu |
+| application | Instance of application class |
+| activity | Starting activity instancce |
+| apiKey | Kairos Api Key |
+| environment | Kairos environment. You should use SANDBOX for test, you should use PRODUCTION for prod |
+| countryCode | 2-letter ISO Code for user’s country, KairosCountry class contains these codes. |
+| languageCode | 2-letter ISO Code for user’s language. KairosLanguage class contains these codes. |
+| onKairosReadyFunc | Lambda method called when paage ready to show |
+| onKairosErrorFunc | Lambda method when an error occured |
 
 
-Kairos gerekli ayarları sunucudan indirdikten sonra KairosEventBus aracılığı ile uygulama katmanına dönüş sağlar.
+After downloading the settings from the server, Kairos returns to the application layer via KairosEventBus.
 
 ```kotlin
 KairosEventBus.subscribe { event->
@@ -63,7 +62,7 @@ KairosEventBus.subscribe { event->
 }
 ```
 
-KAIROS_READY eventi geldiğinde, Kairos sayfa göstermeye hazırdır. Sayfa göstermek için;
+When the KAIROS_READY event arrives, Kairos is ready to show the page.
 
 ```kotlin
 Kairos.showLanding(
@@ -75,41 +74,42 @@ Kairos.showLanding(
 ```
 
 
-| Parametreler | |
+| Parameters | |
 | ------ | ------ |
-| activity | showLanding methodunun çağrıldığı activity’nin instance’ı |
-| requestCode | Kairos tarafından activity açılırken kullanılan requestCode’u |
-| actionKeys | Sayfa gösterimi için kullanılacak action, APPLAUNCH, PREMIUM ve SETTINGS değerleri tanımlı gelmektedir. |
-| errorFunc | Hata ile karşılaşıldığında çağrılacak lambda fonksiyonu |
+| activity | Instance of the activity where the showLanding method is called |
+| requestCode | Request code used by Kairos when opening activity |
+| actionKeys | Action to be used for page display, APPLAUNCH, PREMIUM and SETTINGS values are defined |
+| errorFunc | Lambda method when an error occured  |
 
-## Kairos üzerinden satınalma işlemlerinin dinlenmesi
+## Listen purchase processes from Kairos
 
 ```kotlin
 KairosEventBus.subscribe { event->
    when(event.type){
        event.SUBSCRIPTION_VALIDATION -> {
-           // Satın alma doğrulaması yapıldı
-           Kairos.subscriptionValidation.validationRequestSuccessful // Boolean, satın alma doğrulama isteği yapılmış ise true değil ise false
-           Kairos.subscriptionValidation.purchaseValidated // Boolean, satın alma doğrulanmış ise true, değil ise false
-           Kairos.subscriptionValidation.expirationDate // String, Abonelik bitiş tarihi
+           // Purchase verification done
+           Kairos.subscriptionValidation.validationRequestSuccessful // Boolean It is true If purchase request has been completed otherwise false
+           Kairos.subscriptionValidation.purchaseValidated //  Boolean, It is true if purchase has been approved
+           Kairos.subscriptionValidation.expirationDate // String, Subscription expiration date
        }
        KairosEvent.DO_NOT_SHOW.value -> {
-           // Kairos ayarları sayfanın açılmasına izin vermedi
+           // Kairos settings did not allow the page to open
        }
        KairosEvent.CANCELED.value -> {
-           // Kullanıcı platforma ait satın alma ekranını açtıktan sonra sayfayı kapadı
+           // User closed the page after opening the purchase screen
        }
        KairosEvent.CLOSED.value -> {
-           // Kullanıcı kairos ekranını satın almayı denemeden kapadı
+           // User closed the kairos screen without trying to buy it
        }
    }
 }
 ```
 
 
-## Kullanıcının sayfada tanımlanmış abonelik paketine erişimi olmamasının tespit edilmesi
+## Detect if the subscription package not available to user
 
-Kairos.skuErrorListener fonksiyonu, Play Store istenilen abonelik bilgisini veremediği durumlarda çağrılacaktır. Bu fonksiyon ile kullanıcıya bir mesaj gönderilebilir.
+Kairos.skuErrorListener function is called when subscription info not found on Play Store. A warning message can be shown to user with this function.
 
-## Restore edilecek abonelik bilgisinin bulunmamasının tespit edilmesi
-Kairos.onNothingToRestore fonksiyonu, kullanıcının Play Store üzerinde aktif bir aboneliği bulunmaması ve restore işlemi yapılamayacağı durumda çağrılacaktır. Bu fonksiyon ile restore denemesi yapan kullanıcıya ilgili uyarı mesajı gösterilebilir
+## Detect if there is no subscription to restore
+
+Kairos.onNothingToRestore function is called when there is no active subscription belogn to user on Play Store. A warning message can be shown to users who try to restore their subscriptions.gösterilebilir
